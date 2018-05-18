@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.core.paginator import EmptyPage, PageNotAnInteger
 
+SESSION_KEY = "django-tables2"
 
 class RequestConfig(object):
     '''
@@ -24,9 +25,26 @@ class RequestConfig(object):
              - If `~django.core.paginator.EmptyPage` is raised, show the last page.
 
     '''
+
+
     def __init__(self, request, paginate=True):
         self.request = request
         self.paginate = paginate
+
+    def _set_session_val(self, key, val):
+        if hasattr(self.request, "session"):
+            if SESSION_KEY in self.request.session:
+                if key not in self.request.session[SESSION_KEY] or self.request.session[SESSION_KEY][key] != val:
+                    self.request.session[SESSION_KEY][key] = val
+                    self.request.session.modified = True
+            else:
+                self.request.session[SESSION_KEY] = {key: val}
+
+    def _get_session_val(self, key):
+        try:
+            return self.request.session[SESSION_KEY][key]
+        except (AttributeError, KeyError):
+            pass
 
     def configure(self, table):
         '''
@@ -36,8 +54,15 @@ class RequestConfig(object):
             table (`~.Table`): table to be configured
         '''
         order_by = self.request.GET.getlist(table.prefixed_order_by_field)
+
+        if order_by:
+            self._set_session_val(table.prefixed_order_by_field, order_by)
+        else:
+            order_by = self._get_session_val(table.prefixed_order_by_field)
+
         if order_by:
             table.order_by = order_by
+
         if self.paginate:
             if hasattr(self.paginate, 'items'):
                 kwargs = dict(self.paginate)
