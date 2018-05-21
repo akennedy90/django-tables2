@@ -21,6 +21,7 @@
                 </thead>
             {% endif %}
             {% endblock table.thead %}
+
             {% block table.tbody %}
                 <tbody>
                 {% for row in table.paginated_rows %}
@@ -40,6 +41,7 @@
                 {% endfor %}
                 </tbody>
             {% endblock table.tbody %}
+
             {% block table.tfoot %}
             {% if table.has_footer %}
             <tfoot>

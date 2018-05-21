@@ -2,14 +2,16 @@
 
 {% block table-wrapper %}
 <div class="table-container table-responsive">
+    {% if table.paginator_top %}
+    {% include 'django_tables2/pagination.html' with table=table %}
+    {% endif %}
+
     {% block table %}
     {{ block.super }}
     {% endblock table %}
 
-    {% if table.page and table.paginator.num_pages > 1 %}
-    {% block pagination %}
-    {{ block.super }}
-    {% endblock pagination %}
+    {% if table.paginator_bottom %}
+    {% include 'django_tables2/pagination.html' with table=table %}
     {% endif %}
 </div>
 {% endblock table-wrapper %}

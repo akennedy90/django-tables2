@@ -132,6 +132,8 @@ class TableOptions(object):
         self.page_field = getattr(options, 'page_field', 'page')
         self.per_page = getattr(options, 'per_page', 25)
         self.per_page_field = getattr(options, 'per_page_field', 'per_page')
+        self.paginator_top = getattr(options, 'paginator_top', False)
+        self.paginator_bottom = getattr(options, 'paginator_bottom', True)
         self.prefix = getattr(options, 'prefix', '')
         self.show_header = getattr(options, 'show_header', True)
         self.show_footer = getattr(options, 'show_footer', True)
@@ -248,7 +250,8 @@ class TableBase(object):
                  exclude=None, attrs=None, row_attrs=None, pinned_row_attrs=None,
                  sequence=None, prefix=None, order_by_field=None, page_field=None,
                  per_page_field=None, template_name=None, default=None, request=None,
-                 show_header=None, show_footer=True, extra_columns=None):
+                 show_header=None, show_footer=True, extra_columns=None,
+                 paginator_top=True, paginator_bottom=True):
         super(TableBase, self).__init__()
 
         # note that although data is a keyword argument, it used to be positional
@@ -284,6 +287,8 @@ class TableBase(object):
         self.per_page_field = per_page_field
         self.show_header = show_header
         self.show_footer = show_footer
+        self.paginator_top = paginator_top
+        self.paginator_bottom = paginator_bottom
 
         # Make a copy so that modifying this will not touch the class
         # definition. Note that this is different from forms, where the
