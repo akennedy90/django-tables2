@@ -1,0 +1,14 @@
+{% load django_tables2 %}
+{% load i18n %}
+
+{% if table.page and table.paginator.num_pages > 1 %}
+    <ul class="pagination visible-sm-block visible-xs-block visible-md-inline-block visible-lg-inline-block" >
+    {% for option in table.paginator.count|table_per_page_options %}
+        <li {% if option == table.paginator.per_page %}class="active"{% endif %}>
+            <a href="{% querystring table.prefixed_per_page_field=option %}">
+                {{ option }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endif %}

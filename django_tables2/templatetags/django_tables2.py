@@ -229,6 +229,12 @@ def export_url(context, export_format, export_trigger_param='_export'):
     '''
     return QuerystringNode(updates={export_trigger_param: export_format}, removals=[]).render(context)
 
+@register.filter
+def table_per_page_options(count):
+    for x in (10, 20, 50, 100, 200):
+        if count >= x:
+            yield x
+
 
 @register.filter
 def table_page_range(page, paginator):
