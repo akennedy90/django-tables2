@@ -68,13 +68,20 @@ class RequestConfig(object):
                 kwargs = dict(self.paginate)
             else:
                 kwargs = {}
+
             # extract some options from the request
-            for arg in ('page', 'per_page'):
-                name = getattr(table, 'prefixed_%s_field' % arg)
-                try:
-                    kwargs[arg] = int(self.request.GET[name])
-                except (ValueError, KeyError):
-                    pass
+            try:
+                kwargs['page'] = int(self.request.GET[table.prefixed_page_field])
+            except (ValueError, KeyError):
+                pass
+
+            try:
+                kwargs['per_page'] = int(self.request.GET[table.prefixed_per_page_field])
+                self._set_session_val(table.prefixed_per_page_field, kwargs['per_page'])
+            except (ValueError, KeyError):
+                per_page = self._get_session_val(table.prefixed_per_page_field)
+                if per_page:
+                    kwargs['per_page'] = per_page
 
             silent = kwargs.pop('silent', True)
             if not silent:
