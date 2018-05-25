@@ -232,8 +232,10 @@ def export_url(context, export_format, export_trigger_param='_export'):
 @register.filter
 def table_per_page_options(count):
     for x in (10, 20, 50, 100, 200):
-        if count >= x:
-            yield x
+        yield x
+
+        if count < x:
+            break
 
 
 @register.filter
