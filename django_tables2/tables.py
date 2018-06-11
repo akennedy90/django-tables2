@@ -251,7 +251,7 @@ class TableBase(object):
                  sequence=None, prefix=None, order_by_field=None, page_field=None,
                  per_page_field=None, template_name=None, default=None, request=None,
                  show_header=None, show_footer=True, extra_columns=None,
-                 paginator_top=True, paginator_bottom=True):
+                 paginator_top=True, paginator_bottom=True, anchor=False):
         super(TableBase, self).__init__()
 
         # note that although data is a keyword argument, it used to be positional
@@ -289,6 +289,7 @@ class TableBase(object):
         self.show_footer = show_footer
         self.paginator_top = paginator_top
         self.paginator_bottom = paginator_bottom
+        self.anchor = anchor
 
         # Make a copy so that modifying this will not touch the class
         # definition. Note that this is different from forms, where the

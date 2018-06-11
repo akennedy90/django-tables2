@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block table-wrapper %}
 
-<div class="table-container">
+<div class="table-container" {% if table.anchor %}id="dt2_{{ table.prefix }}{% endif %}">
     {% if table.paginator_top %}
     {% include 'django_tables2/pagination.html' with table=table %}
     {% endif %}
@@ -16,7 +16,7 @@
                     {% for column in table.columns %}
                         <th {{ column.attrs.th.as_html }}>
                             {% if column.orderable %}
-                                <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a>
+                                <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}{% if table.anchor %}#dt2_{{ table.prefix }}{% endif %}">{{ column.header }}</a>
                             {% else %}
                                 {{ column.header }}
                             {% endif %}
